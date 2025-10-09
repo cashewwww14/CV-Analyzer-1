@@ -11,11 +11,11 @@ class JobDescription extends Model
 
     protected $fillable = [
         'job_title',
+        'department_id',
         'department',
         'description',
         'requirements',
         'responsibilities',
-        'skills_required',
         'experience_level',
         'education_level',
         'status',
@@ -28,5 +28,31 @@ class JobDescription extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the department for this job
+     */
+    public function departmentRelation()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    /**
+     * Get all skills required for this job
+     */
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'job_description_skills')
+            ->withPivot('proficiency_level', 'is_required')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get all CV matches for this job
+     */
+    public function cvMatches()
+    {
+        return $this->hasMany(CvJobMatch::class);
     }
 }

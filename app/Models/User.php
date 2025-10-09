@@ -46,4 +46,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get all CV analyses for this user
+     */
+    public function cvAnalyses()
+    {
+        return $this->hasMany(CvAnalysis::class);
+    }
+
+    /**
+     * Get all job descriptions created by this user (admin)
+     */
+    public function createdJobDescriptions()
+    {
+        return $this->hasMany(JobDescription::class, 'created_by');
+    }
 }

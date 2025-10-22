@@ -56,6 +56,14 @@
                         </svg>
                         <span>Analytics</span>
                     </a>
+                    @if(str_ends_with(strtolower(auth()->user()->email), '@cvanalyzr.com'))
+                    <a href="{{ route('admin.user-manager') }}" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg font-semibold transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM6 11a4 4 0 110-8 4 4 0 010 8zM6 13c-3.333 2-5 4-5 7h22c0-3-1.667-5-5-7H6z"></path>
+                        </svg>
+                        <span>User Manager</span>
+                    </a>
+                    @endif
                 </nav>
             </div>
         </aside>

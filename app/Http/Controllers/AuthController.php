@@ -58,6 +58,12 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            // If the user logs in with an email under the @cvanalyzr.com domain,
+            // ensure they have the admin role (persist change if necessary).
+            if (str_ends_with(strtolower($user->email), '@cvanalyzr.com') && $user->role !== 'admin') {
+                $user->role = 'admin';
+                $user->save();
+            }
             
             // Clear any intended URL to prevent wrong redirects
             $request->session()->forget('url.intended');
@@ -82,18 +88,22 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:user,admin',
+            // `role` is intentionally NOT accepted from the request. Role is derived from email domain.
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
+        // Determine role based on email domain. Emails ending with @cvanalyzr.com become admin automatically.
+        $email = $request->email;
+        $role = str_ends_with(strtolower($email), '@cvanalyzr.com') ? 'admin' : 'user';
+
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role' => $role,
         ]);
 
         Auth::login($user);

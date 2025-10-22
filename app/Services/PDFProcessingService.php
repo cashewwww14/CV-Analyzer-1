@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Exception;
+use Smalot\PdfParser\Parser as PdfParser;
 
 class PDFProcessingService
 {
@@ -46,5 +47,22 @@ class PDFProcessingService
             'size_mb' => round($file->getSize() / 1024 / 1024, 2),
             'mime_type' => $file->getMimeType(),
         ];
+    }
+
+    /**
+     * Extract plain text from PDF file using smalot/pdfparser
+     */
+    public function extractText(UploadedFile $file): string
+    {
+        $this->validatePDF($file);
+
+        $parser = new PdfParser();
+        $pdf = $parser->parseFile($file->getRealPath());
+        $text = $pdf->getText();
+
+        // Basic cleanup
+        $text = trim(preg_replace('/\s+/', ' ', $text));
+
+        return $text;
     }
 }

@@ -17,11 +17,14 @@ class CvAnalysis extends Model
         'parsed_data',
         'ai_summary',
         'career_recommendations',
+        'job_requirements',
+        'comment',
         'status',
     ];
 
     protected $casts = [
         'parsed_data' => 'array',
+        'career_recommendations' => 'array',
     ];
 
     /**

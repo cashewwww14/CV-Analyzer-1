@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JobDescription;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 
 class AdminController extends Controller
 {
@@ -105,5 +107,50 @@ class AdminController extends Controller
     public function analytics()
     {
         return view('admin.analytics');
+    }
+
+    /**
+     * Show user manager page. Only admins can reach this route, but we additionally
+     * show or hide management actions depending on whether the admin's email
+     * domain is @cvanalyzr.com
+     */
+    public function userManager()
+    {
+        $current = auth()->user();
+
+        // fetch all users to manage
+        $users = User::all();
+
+        // Determine if current admin is a domain-admin (has @cvanalyzr.com)
+        $isDomainAdmin = str_ends_with(strtolower($current->email), '@cvanalyzr.com');
+
+        return view('admin.user-manager', compact('users', 'isDomainAdmin'));
+    }
+
+    /**
+     * Update a user's role. Only allowed if the acting admin is from @cvanalyzr.com domain.
+     */
+    public function updateUserRole(Request $request, $id): RedirectResponse
+    {
+        $current = auth()->user();
+
+        if (!str_ends_with(strtolower($current->email), '@cvanalyzr.com')) {
+            // Not allowed to change roles
+            abort(403, 'You are not authorized to manage user roles.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'role' => 'required|in:user,admin',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user = User::findOrFail($id);
+        $user->role = $request->role;
+        $user->save();
+
+        return redirect()->route('admin.user-manager')->with('success', 'User role updated successfully.');
     }
 }

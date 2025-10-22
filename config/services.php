@@ -41,4 +41,9 @@ return [
         'temperature' => env('GEMINI_TEMPERATURE', 0.3),
         'max_output_tokens' => env('GEMINI_MAX_TOKENS', 4000),
     ],
+    'huggingface' => [
+        'api_key' => env('HUGGINGFACE_API_KEY'),
+        'model' => env('HUGGINGFACE_MODEL', ''),
+        'endpoint' => env('HUGGINGFACE_ENDPOINT', ''),
+    ],
 ];

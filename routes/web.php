@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CVAnalyzerController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CvAnalysisCommentController;
 use App\Http\Controllers\AdminController;
 
 // Root redirect
@@ -26,7 +27,9 @@ Route::post('/register', [AuthController::class, 'register']);
 // Protected routes - User only
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/home', [CVAnalyzerController::class, 'index'])->name('home');
+    Route::get('/analyze-cv', [CVAnalyzerController::class, 'index'])->name('analyze.cv.form');
     Route::post('/analyze-cv', [CVAnalyzerController::class, 'analyze'])->name('analyze.cv');
+    Route::post('/cv-analysis/{id}/comment', [CvAnalysisCommentController::class, 'store'])->name('cv.analysis.comment');
 });
 
 // Logout route for all authenticated users
@@ -48,4 +51,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     
     Route::get('/monitoring', [AdminController::class, 'monitoring'])->name('admin.monitoring');
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('admin.analytics');
+    
+    // User manager - only accessible to admins. Additional domain-check will be enforced in controller.
+    Route::get('/user-manager', [AdminController::class, 'userManager'])->name('admin.user-manager');
+    Route::post('/user-manager/{id}/role', [AdminController::class, 'updateUserRole'])->name('admin.user-manager.update-role');
 });

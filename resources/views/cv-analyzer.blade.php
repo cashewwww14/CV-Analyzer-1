@@ -93,6 +93,8 @@
                     <p class="mt-2 text-sm text-gray-500">Min 50 characters, max 5000 characters</p>
                 </div>
 
+                <!-- comment removed: comments are added on the results page after analysis -->
+
                 <!-- Submit Button -->
                 <div class="text-center">
                     <button 

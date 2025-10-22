@@ -49,16 +49,7 @@
             </div>
 
             <div class="mb-4">
-                <label for="role" class="block text-gray-700 font-semibold mb-2">Register As</label>
-                <select id="role" 
-                        name="role" 
-                        required
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                    <option value="">Select Role</option>
-                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
-                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                </select>
-                <p class="text-sm text-gray-500 mt-1">User: Access CV Analyzer | Admin: Job Desc Management & Analytics</p>
+                <p class="text-sm text-gray-600">Note: If you register using an email ending with <strong>@cvanalyzr.com</strong>, your account will automatically be assigned the admin role.</p>
             </div>
 
             <div class="mb-4">

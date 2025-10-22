@@ -279,10 +279,29 @@
         @endif
 
         <!-- Back to Top -->
-        <div class="text-center mt-12">
-            <a href="{{ route('home') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                Analyze Another CV
-            </a>
+        <!-- Comment submission -->
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-3">Tambahkan Komentar (opsional)</h2>
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded mb-3">{{ session('success') }}</div>
+            @endif
+
+            @auth
+            <form action="{{ route('cv.analysis.comment', ['id' => $cvAnalysis->id ?? 0]) }}" method="POST">
+                @csrf
+                <textarea name="comment" rows="4" class="block w-full border border-gray-300 rounded p-3 mb-3">{{ old('comment', $cvAnalysis->comment ?? '') }}</textarea>
+                @error('comment')<div class="text-red-600 text-sm mb-2">{{ $message }}</div>@enderror
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Kirim</button>
+                </div>
+            </form>
+            @else
+                <p class="text-sm text-gray-600">Silakan <a href="{{ route('login') }}" class="text-blue-600 underline">login</a> untuk menambahkan komentar.</p>
+            @endauth
+        </div>
+
+        <div class="text-center mt-6">
+            <a href="{{ route('home') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Analyze Another CV</a>
         </div>
     </div>
 

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,       // 2. Create departments
             SkillSeeder::class,            // 3. Create skills
             JobDescriptionSeeder::class,   // 4. Create job descriptions with skills
+            \Database\Seeders\CvAnalysisSeeder::class, // 5. Sample CV analyses
         ]);
 
         $this->command->info('✅ All seeders completed successfully!');
